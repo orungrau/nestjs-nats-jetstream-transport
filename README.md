@@ -1,9 +1,5 @@
 # 🚀 Nats JetStream Transport Module for NestJS
 
-> Breakable changes in v1.3..x
->
-> Replace NatsJetStreamClientProxy with NatsJetStreamClient
-
 Build Event Driven Microservices Architecture with Nats JetStream Server and NestJS.
 
 - At-least-once delivery; exactly once within a window
@@ -65,6 +61,7 @@ You are now ready to publish and consume events on the stream. See the [code exa
 - **serverConsumerOptions**: ServerConsumerOptions
 - **jetStreamOptions**: JetStreamOption
 - **streamConfig**: NatsStreamConfig - Stream configuration. If defined, create stream if not exist.
+- **requestTimeout**: number - Request timeout in milliseconds. Default 30000ms.
 
 ### NatsJetStreamClientOptions
 

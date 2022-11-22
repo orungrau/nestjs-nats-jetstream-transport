@@ -1,8 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, ReadPacket, WritePacket } from '@nestjs/microservices';
 import { Codec, connect, JSONCodec, NatsConnection } from 'nats';
+import { Observable } from 'rxjs';
 import { NATS_JETSTREAM_OPTIONS } from './constants';
 import { NatsJetStreamClientOptions } from './interfaces/nats-jetstream-client-options.interface';
+import { isString } from '@nestjs/common/utils/shared.utils';
 
 @Injectable()
 export class NatsJetStreamClientProxy extends ClientProxy {
@@ -33,6 +35,17 @@ export class NatsJetStreamClientProxy extends ClientProxy {
     this.nc = undefined;
   }
 
+  send<TResult = any, TInput = any>(
+    pattern: any,
+    data: TInput,
+  ): Observable<TResult> {
+    // FIXME:
+    if (isString(pattern)) {
+      pattern = { cmd: pattern };
+    }
+    return super.send(pattern, data);
+  }
+
   protected publish(
     packet: ReadPacket,
     callback: (packet: WritePacket) => void,
@@ -41,7 +54,9 @@ export class NatsJetStreamClientProxy extends ClientProxy {
     const subject = this.normalizePattern(packet.pattern);
 
     this.nc
-      .request(subject, payload)
+      .request(subject, payload, {
+        timeout: this.options.requestTimeout | 30000,
+      })
       .then((msg) => this.codec.decode(msg.data) as WritePacket)
       .then((packet) => callback(packet))
       .catch((err) => {

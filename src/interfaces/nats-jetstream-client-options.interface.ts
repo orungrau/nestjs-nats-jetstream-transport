@@ -11,6 +11,7 @@ export interface NatsJetStreamClientOptions {
     Pick<ConnectionOptions, 'name'>;
   jetStreamOption?: JetStreamOptions;
   jetStreamPublishOptions?: JetStreamPublishOptions;
+  requestTimeout?: number;
 }
 
 // noinspection JSUnusedGlobalSymbols

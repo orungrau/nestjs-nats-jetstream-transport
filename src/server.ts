@@ -1,4 +1,8 @@
-import { CustomTransportStrategy, Server } from '@nestjs/microservices';
+import {
+  CustomTransportStrategy,
+  MessageHandler,
+  Server,
+} from '@nestjs/microservices';
 import {
   Codec,
   connect,
@@ -12,6 +16,7 @@ import { NatsContext, NatsJetStreamContext } from './nats-jetstream.context';
 import { serverConsumerOptionsBuilder } from './utils/server-consumer-options-builder';
 import { from } from 'rxjs';
 import { NatsJetStreamServerOptions } from './interfaces/nats-jetstream-server-options.interface';
+import { isString } from '@nestjs/common/utils/shared.utils';
 
 export class NatsJetStreamServer
   extends Server
@@ -47,6 +52,19 @@ export class NatsJetStreamServer
     await this.nc.drain();
     await this.nc.close();
     this.nc = undefined;
+  }
+
+  addHandler(
+    pattern: any,
+    callback: MessageHandler<any, any, any>,
+    isEventHandler?: boolean,
+    extras?: Record<string, any>,
+  ): void {
+    // FIXME:
+    if (isString(pattern)) {
+      pattern = { cmd: pattern };
+    }
+    super.addHandler(pattern, callback, isEventHandler, extras);
   }
 
   private async bindEventHandlers() {
@@ -128,7 +146,6 @@ export class NatsJetStreamServer
     } else {
       const streamInfo = await this.jsm.streams.add(streamConfig);
       this.logger.log(`Stream ${streamInfo.config.name} created`);
-      console.log(streamInfo.config);
     }
   }
 }
