@@ -61,8 +61,10 @@ export class NatsJetStreamServer
     extras?: Record<string, any>,
   ): void {
     // FIXME:
-    if (isString(pattern)) {
-      pattern = { cmd: pattern };
+    if (!isEventHandler) {
+      if (isString(pattern)) {
+        pattern = { cmd: pattern };
+      }
     }
     super.addHandler(pattern, callback, isEventHandler, extras);
   }
