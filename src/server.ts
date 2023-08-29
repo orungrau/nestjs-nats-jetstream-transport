@@ -27,12 +27,12 @@ export class NatsJetStreamServer
   private codec: Codec<JSON>;
   private jsm: JetStreamManager;
 
-  readonly transportId = NATS_TRANSPORT;
+  readonly transportId: symbol;
 
   constructor(private options: NatsJetStreamServerOptions) {
     super();
     this.codec = JSONCodec();
-    this.transportId = options.transportId;
+    this.transportId = options.transportId ?? NATS_TRANSPORT;
   }
 
   async listen(callback: () => null) {
