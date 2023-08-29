@@ -17,6 +17,7 @@ import { serverConsumerOptionsBuilder } from './utils/server-consumer-options-bu
 import { from } from 'rxjs';
 import { NatsJetStreamServerOptions } from './interfaces/nats-jetstream-server-options.interface';
 import { isString } from '@nestjs/common/utils/shared.utils';
+import { NATS_TRANSPORT } from './constants';
 
 export class NatsJetStreamServer
   extends Server
@@ -26,9 +27,12 @@ export class NatsJetStreamServer
   private codec: Codec<JSON>;
   private jsm: JetStreamManager;
 
+  readonly transportId = NATS_TRANSPORT;
+
   constructor(private options: NatsJetStreamServerOptions) {
     super();
     this.codec = JSONCodec();
+    this.transportId = options.transportId;
   }
 
   async listen(callback: () => null) {

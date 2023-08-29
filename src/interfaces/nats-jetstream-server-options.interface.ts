@@ -4,6 +4,7 @@ import { NatsConnectionOptions } from './nats-connection-options.interface';
 import { NatsStreamConfig } from './nats-stream-config.interface';
 
 export interface NatsJetStreamServerOptions {
+  transportId?: symbol;
   connectionOptions: Partial<NatsConnectionOptions> &
     Pick<NatsConnectionOptions, 'name'>;
   consumerOptions: Partial<ServerConsumerOptions>;
