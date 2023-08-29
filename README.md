@@ -57,11 +57,11 @@ You are now ready to publish and consume events on the stream. See the [code exa
 
 ### NatsJetStreamServerOptions
 
+- **transportId**: symbol - id of the transport. Default NATS_TRANSPORT.
 - **connectionOptions**: NatsConnectionOptions
-- **serverConsumerOptions**: ServerConsumerOptions
+- **consumerOptions**: ServerConsumerOptions
 - **jetStreamOptions**: JetStreamOption
 - **streamConfig**: NatsStreamConfig - Stream configuration. If defined, create stream if not exist.
-- **requestTimeout**: number - Request timeout in milliseconds. Default 30000ms.
 
 ### NatsJetStreamClientOptions
 
